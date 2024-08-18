@@ -47,11 +47,34 @@ class Scanner {
 			case '+': addToken(PLUS); break;
 			case ';': addToken(SEMICOLON); break;
 			case '*': addToken(STAR); break;
+			case '!':
+		        addToken(match('=') ? BANG_EQUAL : BANG);
+		        break;
+			case '=':
+				addToken(match('=') ? EQUAL_EQUAL : EQUAL);
+				break;
+			case '<':
+				addToken(match('=') ? LESS_EQUAL : LESS);
+				break;
+			case '>':
+				addToken(match('=') ? GREATER_EQUAL : GREATER);
+				break;
+		 default:
 			default:
 		        Lox.error(line, "Unexpected character.");
 		        break;
 		}
 	}
+	
+	// It’s like a conditional advance(). We only consume 
+	// the current character if it’s what we’re looking for.
+	private boolean match(char expected) {
+	    if (isAtEnd()) return false;
+	    if (source.charAt(current) != expected) return false;
+
+	    current++;
+	    return true;
+   }
 	
 	private boolean isAtEnd() {
 		return current >= source.length();
